@@ -259,7 +259,7 @@ func fetchDef(word string) tea.Cmd {
 				in = true
 				continue
 			}
-			if in && strings.HasPrefix(l, "== {{") {
+			if in && strings.HasPrefix(l, "== {{") && !strings.HasPrefix(l, "===") {
 				break
 			}
 			if in && strings.HasPrefix(l, "# ") {
@@ -471,9 +471,14 @@ func (m *model) View() string {
 	if m.over {
 		lines = append(lines, titleStyle.Render("♡  M O T U S  ♡"), "", m.renderGrid(), "",
 			msgStyle.Render(m.message), "")
-		for _, l := range strings.Split(m.def, "\n") {
-			if strings.TrimSpace(l) != "" {
-				lines = append(lines, msgStyle.Render(l))
+		if strings.TrimSpace(m.def) != "" {
+			lines = append(lines, msgStyle.Render("📖 Définition"))
+			for _, l := range strings.Split(m.def, "\n") {
+				l = strings.TrimSpace(l)
+				l = strings.TrimPrefix(l, "# ")
+				if l != "" {
+					lines = append(lines, msgStyle.Render(l))
+				}
 			}
 		}
 		lines = append(lines, "", helpStyle.Render("[n] rejouer · [m] menu · [q] quitter"))
