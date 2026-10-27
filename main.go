@@ -32,8 +32,8 @@ var secrets = map[int][]string{}
 
 var (
 	titleStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#D6488C", Dark: "#FF9EC4"})
-	goodStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#B3243C", Dark: "#FF7B8A"})
-	presStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#1F5FA8", Dark: "#7BB8FF"})
+	goodStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#1F5FA8", Dark: "#7BB8FF"}) // bien placé : bleu
+	presStyle  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#B3243C", Dark: "#FF7B8A"}) // mal placé : rouge
 	missStyle  = lipgloss.NewStyle().Foreground(lipgloss.AdaptiveColor{Light: "#8A8A8A", Dark: "#6A6A6A"})
 	givenStyle = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#444444", Dark: "#DDDDDD"})
 	cursorSty  = lipgloss.NewStyle().Bold(true).Foreground(lipgloss.AdaptiveColor{Light: "#D6488C", Dark: "#FF9EC4"})
