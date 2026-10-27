@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"fmt"
 	"math/rand"
 	"encoding/json"
@@ -16,6 +17,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
+
+//go:embed data/mots.txt data/secrets.txt
+var dataFS embed.FS
 
 const maxTries = 6
 
@@ -60,7 +64,7 @@ func loadData() {
 		name string
 		m    map[int][]string
 	}{{"data/mots.txt", dict}, {"data/secrets.txt", secrets}} {
-		file, err := os.Open(f.name)
+		file, err := dataFS.Open(f.name)
 		if err != nil {
 			continue
 		}
@@ -136,7 +140,16 @@ func prevFreeBefore(m *model, from int) int {
 func (m *model) start(level int) {
 	m.level = level
 	m.len = levels[level].letters
-	m.secret = secrets[m.len][rand.Intn(len(secrets[m.len]))]
+	pool := secrets[m.len]
+	if len(pool) == 0 {
+		pool = dict[m.len]
+	}
+	if len(pool) == 0 {
+		m.message = "Dictionnaire introuvable (＞﹏＜"
+		m.menu = true
+		return
+	}
+	m.secret = pool[rand.Intn(len(pool))]
 	m.grid = nil
 	m.states = nil
 	m.current = make([]rune, m.len)
