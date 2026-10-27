@@ -464,20 +464,18 @@ func centerLines(w, h int, lines []string) string {
 
 func (m *model) View() string {
 	if m.menu {
-		lines := []string{titleStyle.Render("♡  M O T U S  ♡"), ""}
+		lines := []string{titleStyle.Render(" ♡  M O T U S  ♡ "), ""}
+		lines = append(lines, msgStyle.Render("Choisis ta longueur :"), "")
 		for i, l := range levels {
-			cur := (i == m.level)
-			marker := "  "
-			if cur {
-				marker = "→ "
+			prefix := fmt.Sprintf("  [%d] ", i+1)
+			line := fmt.Sprintf("%d lettres · %d essais", l.letters, maxTries)
+			style := msgStyle
+			if i == m.level {
+				style = cursorSty
 			}
-			indic := "·"
-			if l.hints > 0 {
-				indic = fmt.Sprint(l.hints) + " indice(s)"
-			}
-			lines = append(lines, marker+fmt.Sprintf("%d. %d lettres · %s", i+1, l.letters, indic))
+			lines = append(lines, style.Render(prefix+line))
 		}
-		lines = append(lines, "", helpStyle.Render("↑↓ choisir · entrée jouer · q quitter"))
+		lines = append(lines, "", helpStyle.Render("↑↓ choisir · entrée jouer · 1-5 direct · q quitter"))
 		return centerLines(m.width, m.height, lines)
 	}
 	var lines []string
