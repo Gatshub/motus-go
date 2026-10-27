@@ -188,7 +188,13 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 		switch k {
-		case "q", "ctrl+c":
+		case "q":
+			// lettre en pleine partie ; quitter est réservé au menu
+			if m.over {
+				return m, tea.Quit
+			}
+			m.typeRune('q')
+		case "ctrl+c":
 			return m, tea.Quit
 		case "esc":
 			m.menu = true
@@ -492,12 +498,12 @@ func (m *model) View() string {
 				}
 			}
 		}
-		lines = append(lines, "", helpStyle.Render("[n] rejouer · [m] menu · [q] quitter"))
+		lines = append(lines, "", helpStyle.Render("[n] rejouer · esc menu · q quitter"))
 	} else {
 		lines = append(lines, titleStyle.Render("♡  M O T U S  ♡"), "",
 			fmt.Sprintf("mot de %d lettres · essai %d/%d", m.len, len(m.grid)+1, maxTries),
 			"", m.renderGrid(), "", msgStyle.Render(m.message), "",
-			helpStyle.Render("←→ bouger · backspace · entrée · esc menu · q quitter"))
+			helpStyle.Render("←→ bouger · backspace · entrée · esc menu"))
 	}
 	return centerLines(m.width, m.height, lines)
 }
