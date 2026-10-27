@@ -129,12 +129,15 @@ func nextFreeAfter(m *model, from int) int {
 }
 
 func prevFreeBefore(m *model, from int) int {
+	if from >= m.len {
+		from = m.len - 1 // from peut être la sentinelle m.len (saisie complète)
+	}
 	for i := from; i >= 0; i-- {
 		if !m.locked[i] {
 			return i
 		}
 	}
-	return firstFree(m, 1)
+	return m.len // plus de case libre : pas de déplacement
 }
 
 func (m *model) start(level int) {
